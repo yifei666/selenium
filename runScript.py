@@ -25,14 +25,19 @@ from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 
 
+import json
+
+# Opening JSON file
+f = open('booklist.json')
+
+# returns JSON object as
+# a dictionary
+booklist = json.load(f)
 
 
-
-stock_list = ["INTC", "MSFT", "CSCO", "AAPL", "AMZN", "GOOG", "JNPR", "VZ", "T", "TMUS"]
-booklist = ["The Gruffalo", "The Frog Princess", "Moonlight on the Magic Flute"
-            , "Charlotte's Web"]
 # booklist = ["Big Easter Adventure"]
 dic = {}
+
 # for stock in stock_list:  
 #     driver = webdriver.Chrome()
 #     driver.get("https://finance.yahoo.com/")
@@ -75,10 +80,11 @@ for book in booklist:
         AR = driver.find_element_by_xpath("//span[@id='ctl00_ContentPlaceHolder1_ucBookDetail_lblPoints']").text
         
         
-        print(book)
+
     except NameError and NoSuchElementException:
+        driver.quit()
         
-        print(book)
+
         
     #LEX part
     driver.get("https://hub.lexile.com/find-a-book/search")
@@ -96,3 +102,6 @@ for book in booklist:
     
     dic[book] = (AR,Lex)
     print(dic)
+
+with open("finallist.json", "w") as outfile:
+    json.dump(booklist, outfile, indent=6)
